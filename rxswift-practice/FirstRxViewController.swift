@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FirstRxViewController.swift
 //  rxswift-practice
 //
 //  Created by 最上聖也 on 2017/06/04.
@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ViewController: UIViewController {
+class FirstRxViewController: UIViewController {
 
     @IBOutlet weak var firstLabel: UILabel!
     @IBOutlet weak var firstTextField: UITextField!

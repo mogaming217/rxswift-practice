@@ -8,6 +8,7 @@ target 'rxswift-practice' do
   # Pods for rxswift-practice
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod ‘RealmSwift’
 
   target 'rxswift-practiceTests' do
     inherit! :search_paths
