@@ -46,10 +46,6 @@ class TwoWayBindingVC: UIViewController {
             .bind(to: successMessageField.rx.text)
             .disposed(by: disposeBag)
         
-        viewModel.sMessage.asObservable()
-            .bind(to: successMessageLabel.rx.text)
-            .disposed(by: disposeBag)
-        
         viewModel.isSuccessSaveButtonEnabled
             .bind(to: successSaveButton.rx.isEnabled)
             .disposed(by: disposeBag)
@@ -62,10 +58,6 @@ class TwoWayBindingVC: UIViewController {
         
         viewModel.fMessage.asObservable()
             .bind(to: failMessageField.rx.text)
-            .disposed(by: disposeBag)
-        
-        viewModel.fMessage.asObservable()
-            .bind(to: failMessageLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.isFailSaveButtonEnabled
