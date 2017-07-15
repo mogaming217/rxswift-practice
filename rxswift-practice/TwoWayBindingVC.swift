@@ -13,13 +13,13 @@ import RxCocoa
 
 class TwoWayBindingVC: UIViewController {
     
-    @IBOutlet weak var successIdField: UITextField!
-    @IBOutlet weak var successStringField: UITextField!
+    @IBOutlet weak var successMessageField: UITextField!
     @IBOutlet weak var successSaveButton: UIButton!
+    @IBOutlet weak var successMessageLabel: UILabel!
     
-    @IBOutlet weak var failIdField: UITextField!
-    @IBOutlet weak var failStringField: UITextField!
+    @IBOutlet weak var failMessageField: UITextField!
     @IBOutlet weak var failSaveButton: UIButton!
+    @IBOutlet weak var failMessageLabel: UILabel!
     
     private let viewModel = TwoWayBindingVM()
     private let disposeBag = DisposeBag()
@@ -28,32 +28,48 @@ class TwoWayBindingVC: UIViewController {
         super.viewDidLoad()
         
         bindSuccess()
-        // IDを決め打ちする
-        successIdField.text = "123"
-        successIdField.sendActions(for: .valueChanged)
+        bindFail()
+        
+        // メッセージをコードから代入する
+        successMessageField.text = "こんにちは"
+        successMessageField.sendActions(for: .valueChanged)
+        
+        failMessageField.text = "こんにちは"
     }
     
     private func bindSuccess() {
-        successIdField.rx.text.orEmpty
-            .bind(to: viewModel.sId)
-            .disposed(by: disposeBag)
-        
-        successStringField.rx.text.orEmpty
+        successMessageField.rx.text.orEmpty
             .bind(to: viewModel.sMessage)
             .disposed(by: disposeBag)
         
         viewModel.sMessage.asObservable()
-            .bind(to: successStringField.rx.text)
+            .bind(to: successMessageField.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.sMessage.asObservable()
+            .bind(to: successMessageLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.isSuccessSaveButtonEnabled
             .bind(to: successSaveButton.rx.isEnabled)
             .disposed(by: disposeBag)
+    }
+    
+    private func bindFail() {
+        failMessageField.rx.text.orEmpty
+            .bind(to: viewModel.fMessage)
+            .disposed(by: disposeBag)
         
-        successSaveButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                self?.viewModel.saveSuccessMessage()
-            })
+        viewModel.fMessage.asObservable()
+            .bind(to: failMessageField.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.fMessage.asObservable()
+            .bind(to: failMessageLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.isFailSaveButtonEnabled
+            .bind(to: failSaveButton.rx.isEnabled)
             .disposed(by: disposeBag)
     }
 }

@@ -8,57 +8,27 @@
 
 import Foundation
 import RxSwift
-import RealmSwift
 
 class TwoWayBindingVM {
     
     private let disposeBag = DisposeBag()
     
     // 成功する方のVM
-    var sId: Variable<String>
     var sMessage: Variable<String>
     var isSuccessSaveButtonEnabled: Observable<Bool> {
-        return Observable<Bool>.combineLatest(sId.asObservable(), sMessage.asObservable()) { id, message in
-            guard id.characters.count > 0, message.characters.count > 0 else {
-                return false
-            }
-            
-            return true
-        }
+        return sMessage.asObservable().map { $0.characters.count > 0 }
     }
     
     // 失敗する方のVM
-    var fId: Variable<String>
     var fMessage: Variable<String>
-    
-    init() {
-        sId = Variable("")
-        sMessage = Variable("")
-        
-        fId = Variable("")
-        fMessage = Variable("")
-        
-        sId.asObservable().debug()
-            .subscribe(onNext: { [weak self] id in
-                let realm = try! Realm()
-                if let result = realm.object(ofType: MessageRealm.self, forPrimaryKey: id) {
-                    print(result)
-                    self?.sMessage.value = result.message
-                }
-                
-            })
-            .disposed(by: disposeBag)
-        
+    var isFailSaveButtonEnabled: Observable<Bool> {
+        return fMessage.asObservable().map { $0.characters.count > 0 }
     }
     
-    func saveSuccessMessage() {
-        let realm = try! Realm()
-        let message = MessageRealm()
-        message.id = sId.value
-        message.message = sMessage.value
+    init() {
+        sMessage = Variable("")
         
-        try! realm.write {
-            realm.add(message, update: true)
-        }
+        fMessage = Variable("")
+        
     }
 }
